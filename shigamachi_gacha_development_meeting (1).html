@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>志賀町ガチャアプリ｜開発会議説明資料</title>
+<style>
+:root{
+  --blue:#0B67B2;
+  --blue2:#084F8A;
+  --green:#69B340;
+  --orange:#F0820F;
+  --cream:#FFF9EF;
+  --bg:#F4F7FA;
+  --text:#17324D;
+  --muted:#66788A;
+  --white:#fff;
+  --line:#DCE6EE;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  font-family:-apple-system,BlinkMacSystemFont,"Noto Sans JP","Yu Gothic",sans-serif;
+  background:var(--bg); color:var(--text); line-height:1.75;
+}
+.hero{
+  min-height:88vh; display:flex; align-items:center; justify-content:center;
+  padding:60px 22px; position:relative; overflow:hidden;
+  background:linear-gradient(135deg,#0B67B2 0%,#0B67B2 58%,#69B340 100%);
+  color:#fff;
+}
+.hero:before,.hero:after{
+  content:""; position:absolute; border-radius:50%; background:rgba(255,255,255,.10);
+}
+.hero:before{width:430px;height:430px;right:-150px;top:-150px}
+.hero:after{width:300px;height:300px;left:-130px;bottom:-130px}
+.hero-inner{max-width:1050px;width:100%;position:relative;z-index:2}
+.kicker{letter-spacing:.18em;font-size:.82rem;font-weight:800;opacity:.85}
+h1{font-size:clamp(2.5rem,7vw,5.8rem);line-height:1.08;margin:18px 0}
+.hero p{font-size:clamp(1rem,2vw,1.35rem);max-width:760px;margin:0 0 28px}
+.hero-tag{
+  display:inline-block;padding:8px 14px;border-radius:999px;
+  background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.3);
+  margin-right:8px;margin-bottom:8px;font-weight:700
+}
+.section{max-width:1100px;margin:auto;padding:80px 22px}
+.section-label{font-size:.78rem;letter-spacing:.16em;color:var(--blue);font-weight:900}
+h2{font-size:clamp(1.9rem,4vw,3rem);line-height:1.2;margin:8px 0 34px}
+h3{margin:0 0 10px}
+.lead{font-size:1.12rem;color:#42596D;max-width:850px}
+.quote{
+  margin:30px 0;padding:28px 30px;background:#fff;border-left:7px solid var(--orange);
+  border-radius:18px;box-shadow:0 10px 30px rgba(20,50,80,.07);
+  font-size:clamp(1.4rem,3vw,2.3rem);font-weight:900
+}
+.flow{
+  display:grid;grid-template-columns:repeat(6,1fr);gap:12px;align-items:stretch
+}
+.step{
+  background:#fff;border:1px solid var(--line);border-radius:18px;padding:20px 12px;
+  text-align:center;box-shadow:0 8px 24px rgba(20,50,80,.06);position:relative
+}
+.step:not(:last-child):after{
+  content:"→";position:absolute;right:-18px;top:50%;transform:translateY(-50%);
+  color:var(--blue);font-size:1.5rem;font-weight:900;z-index:2
+}
+.icon{font-size:2rem;display:block;margin-bottom:8px}
+.step strong{display:block;font-size:.95rem}
+.step small{color:var(--muted)}
+.card-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.card{
+  background:#fff;border:1px solid var(--line);border-radius:20px;padding:24px;
+  box-shadow:0 8px 24px rgba(20,50,80,.05)
+}
+.card .num{font-size:.75rem;font-weight:900;color:var(--blue);letter-spacing:.12em}
+.card .big{font-size:1.5rem;font-weight:900;margin:6px 0 10px}
+.card p{margin:0;color:#526779}
+.pill{display:inline-block;padding:5px 10px;border-radius:999px;font-size:.78rem;font-weight:800;margin:3px 3px 0 0;background:#EAF3FB;color:var(--blue)}
+.pill.green{background:#EEF8E9;color:#4E922C}
+.pill.orange{background:#FFF1E3;color:#C96300}
+.home{
+  background:#fff;border-radius:28px;padding:28px;max-width:720px;margin:0 auto;
+  box-shadow:0 18px 45px rgba(20,50,80,.10);border:1px solid var(--line)
+}
+.home-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:22px}
+.progress{height:12px;background:#E8EEF3;border-radius:99px;overflow:hidden}
+.progress span{display:block;width:68%;height:100%;background:linear-gradient(90deg,var(--blue),var(--green))}
+.menu-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:20px}
+.menu{
+  border:1px solid var(--line);border-radius:16px;padding:18px;background:#FAFCFD;
+  font-weight:800
+}
+.menu span{font-size:1.6rem;display:block}
+.loop{
+  display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:10px;margin-top:30px
+}
+.loop-item{padding:15px 20px;border-radius:16px;background:#fff;border:1px solid var(--line);font-weight:900}
+.arrow{color:var(--blue);font-size:1.4rem;font-weight:900}
+.highlight{
+  background:linear-gradient(135deg,#FFF9EF,#fff);border:1px solid #F4D8B5;
+  border-radius:24px;padding:30px;margin-top:25px
+}
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;background:#fff;border-radius:18px;overflow:hidden}
+th,td{padding:15px 14px;border-bottom:1px solid var(--line);text-align:left}
+th{background:#EDF5FB;color:var(--blue);font-size:.88rem}
+.badge{font-weight:900;color:var(--blue)}
+.priority{white-space:nowrap}
+.mvp{
+  background:linear-gradient(135deg,#0B67B2,#084F8A);color:#fff;border-radius:28px;padding:34px;
+}
+.mvp .flow .step{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.18);color:#fff}
+.mvp .step:not(:last-child):after{color:#fff}
+.mvp .step small{color:#D9E8F5}
+footer{padding:50px 22px;text-align:center;background:#12334D;color:#DCEAF5}
+@media(max-width:850px){
+  .flow{grid-template-columns:repeat(3,1fr)}
+  .step:nth-child(3):after{display:none}
+  .card-grid{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:600px){
+  .section{padding:55px 17px}
+  .flow{grid-template-columns:1fr 1fr}
+  .step:not(:last-child):after{display:none}
+  .card-grid{grid-template-columns:1fr}
+  .menu-grid{grid-template-columns:1fr 1fr}
+  .quote{padding:22px}
+}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="hero-inner">
+    <div class="kicker">志賀町 × 日本酒 × ハッカソン</div>
+    <h1>志賀町ガチャ<br>アプリ構想</h1>
+    <p>QRコードを入口に、ガチャを楽しみながら志賀町を「知る・巡る・食べる・買う」体験へ。</p>
+    <span class="hero-tag">🎰 10連ガチャ</span>
+    <span class="hero-tag">📱 QR回遊</span>
+    <span class="hero-tag">📖 コレクション</span>
+    <span class="hero-tag">🍶 食 × 日本酒</span>
+  </div>
+</header>
+
+<section class="section">
+  <div class="section-label">01 / CONCEPT</div>
+  <h2>今回のアプリで目指すこと</h2>
+  <p class="lead">観光情報を「見てもらう」だけではなく、ガチャを回したいという気持ちを、実際の町歩きにつなげる。</p>
+  <div class="quote">「ガチャを回したくて、志賀町を巡る。」</div>
+  <p>最終的には、<strong>遊ぶ → 知る → 集める → 巡る → 食べる・買う</strong>という循環をつくる。</p>
+</section>
+
+<section class="section">
+  <div class="section-label">02 / FIRST EXPERIENCE</div>
+  <h2>初回利用の流れ</h2>
+  <p class="lead">アプリを開いてからホームを見るのではなく、まず「現地のQRコード」からガチャ体験を始める。</p>
+  <div class="flow" style="margin-top:30px">
+    <div class="step"><span class="icon">📱</span><strong>QR読み込み</strong><small>飲食店・道の駅など</small></div>
+    <div class="step"><span class="icon">▶️</span><strong>START</strong><small>ゲーム感覚で開始</small></div>
+    <div class="step"><span class="icon">👤</span><strong>タイプ設定</strong><small>初回のみ</small></div>
+    <div class="step"><span class="icon">🎰</span><strong>ガチャ開始</strong><small>演出ムービー</small></div>
+    <div class="step"><span class="icon">✨</span><strong>10連結果</strong><small>10個を公開</small></div>
+    <div class="step"><span class="icon">🏠</span><strong>ホーム</strong><small>コレクション確認</small></div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="section-label">03 / REPEAT</div>
+  <h2>2回目以降は、もっとスムーズに</h2>
+  <p class="lead">初回に設定したタイプを保存。次に別の場所でQRを読み込んだときは、タイプ選択を省略してガチャへ進む。</p>
+  <div class="highlight">
+    <div class="flow">
+      <div class="step"><span class="icon">📱</span><strong>別のQR</strong></div>
+      <div class="step"><span class="icon">▶️</span><strong>START</strong></div>
+      <div class="step"><span class="icon">🍶</span><strong>保存済みタイプ</strong><small>自動で反映</small></div>
+      <div class="step"><span class="icon">🎰</span><strong>10連</strong></div>
+      <div class="step"><span class="icon">✨</span><strong>結果</strong></div>
+      <div class="step"><span class="icon">🏠</span><strong>ホーム</strong></div>
+    </div>
+    <p style="margin:25px 0 0"><strong>ポイント：</strong>タイプは後から「変更する」ことも可能。初回設定を保存することで、継続利用時の操作を減らす。</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="section-label">04 / GACHA</div>
+  <h2>10連ガチャを「体験」にする</h2>
+  <div class="card-grid">
+    <div class="card"><div class="num">01</div><div class="big">🎬 演出ムービー</div><p>単なる結果表示ではなく、ゲーム・アニメのガチャのようなワクワク感を演出。</p></div>
+    <div class="card"><div class="num">02</div><div class="big">💎 レア度</div><p>N → R → SR → SSRなど、集めたくなるコレクション要素を設定。</p></div>
+    <div class="card"><div class="num">03</div><div class="big">🎯 タイプ反映</div><p>「お酒好き」「グルメ好き」など、選んだタイプに応じて出現内容を調整。</p></div>
+  </div>
+  <div class="highlight">
+    <strong>ガチャの中身（案）</strong><br>
+    <span class="pill">🏞️ 観光地</span>
+    <span class="pill green">🍴 郷土料理</span>
+    <span class="pill orange">🛍️ 特産品</span>
+    <span class="pill">🍶 日本酒</span>
+    <span class="pill green">🏪 飲食店</span>
+  </div>
+</section>
+
+<section class="section">
+  <div class="section-label">05 / HOME</div>
+  <h2>ホームは「自分の志賀町基地」</h2>
+  <p class="lead">ホームを単なるトップページではなく、「自分がどれだけ志賀町を集めたか」を確認する場所にする。</p>
+  <div class="home">
+    <div class="home-top"><strong>志賀町コレクション</strong><span>34 / 50</span></div>
+    <div class="progress"><span></span></div>
+    <p style="margin:8px 0 0;color:#66788A">コンプリート率 68%</p>
+    <div class="menu-grid">
+      <div class="menu"><span>📖</span>コンプリート図鑑</div>
+      <div class="menu"><span>🗺️</span>ガチャスポット</div>
+      <div class="menu"><span>🏆</span>ミッション</div>
+      <div class="menu"><span>🍶</span>食・日本酒</div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="section-label">06 / COLLECTION</div>
+  <h2>「集めたい」が次の行動を生む</h2>
+  <p class="lead">獲得したコンテンツは図鑑へ登録。未取得のものをシルエットなどで表示し、「あと○個」という目的をつくる。</p>
+  <div class="card-grid">
+    <div class="card"><div class="big">📖 図鑑</div><p>観光地・郷土料理・特産品・日本酒などをコレクション。</p></div>
+    <div class="card"><div class="big">🏆 ミッション</div><p>「3店舗訪問」「5スポット制覇」「SSRを獲得」などの達成要素。</p></div>
+    <div class="card"><div class="big">🗺️ スポット</div><p>QRコードが設置された場所を確認し、次の訪問先につなげる。</p></div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="section-label">07 / LOCAL LOOP</div>
+  <h2>アプリ内で終わらせない</h2>
+  <p class="lead">ガチャ結果から、実際の飲食店・観光地・特産品の購入へつなげる。</p>
+  <div class="loop">
+    <div class="loop-item">📱 QR</div><div class="arrow">→</div>
+    <div class="loop-item">🎰 遊ぶ</div><div class="arrow">→</div>
+    <div class="loop-item">💡 知る</div><div class="arrow">→</div>
+    <div class="loop-item">📖 集める</div><div class="arrow">→</div>
+    <div class="loop-item">🗺️ 巡る</div><div class="arrow">→</div>
+    <div class="loop-item">🍴 食べる・🛍️ 買う</div>
+  </div>
+  <div class="quote" style="margin-top:40px">遊ぶ → 知る → 巡る → 買う</div>
+</section>
+
+<section class="section">
+  <div class="section-label">08 / CONTENT DETAIL</div>
+  <h2>ガチャ結果を「地域情報」につなげる</h2>
+  <div class="card-grid">
+    <div class="card"><div class="big">🍴 郷土料理</div><p>写真・説明・食べられる店舗・関連する日本酒・紹介動画など。</p></div>
+    <div class="card"><div class="big">🏞️ 観光地</div><p>場所・見どころ・地図・関連スポットなどを表示。</p></div>
+    <div class="card"><div class="big">🛍️ 特産品</div><p>商品の特徴・購入場所・道の駅・店舗などへ誘導。</p></div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="section-label">09 / REQUIRED SCREENS</div>
+  <h2>必要となる主な画面</h2>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>区分</th><th>画面</th><th>役割</th><th>優先度</th></tr></thead>
+      <tbody>
+        <tr><td>ガチャ体験</td><td class="badge">QR読み込み</td><td>現地スポットから開始</td><td class="priority">★★★</td></tr>
+        <tr><td>ガチャ体験</td><td class="badge">START</td><td>ゲーム体験の入口</td><td class="priority">★★★</td></tr>
+        <tr><td>ガチャ体験</td><td class="badge">タイプ設定</td><td>初回のみ利用者タイプを設定</td><td class="priority">★★★</td></tr>
+        <tr><td>ガチャ体験</td><td class="badge">ガチャ演出・10連結果</td><td>アプリの中心機能</td><td class="priority">★★★</td></tr>
+        <tr><td>ホーム</td><td class="badge">ホーム</td><td>コレクション・各機能への入口</td><td class="priority">★★★</td></tr>
+        <tr><td>コレクション</td><td class="badge">図鑑</td><td>獲得コンテンツを確認</td><td class="priority">★★★</td></tr>
+        <tr><td>回遊</td><td class="badge">スポット・マップ</td><td>次の訪問先へ誘導</td><td class="priority">★★☆</td></tr>
+        <tr><td>回遊</td><td class="badge">ミッション</td><td>継続利用の動機づけ</td><td class="priority">★★☆</td></tr>
+        <tr><td>地域PR</td><td class="badge">食・日本酒</td><td>食文化・日本酒との接点</td><td class="priority">★★☆</td></tr>
+        <tr><td>地域PR</td><td class="badge">店舗・特産品詳細</td><td>実店舗・購入へ誘導</td><td class="priority">★★☆</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section class="section">
+  <div class="section-label">10 / MVP</div>
+  <h2>まず作る試作版</h2>
+  <div class="mvp">
+    <p style="margin-top:0;font-size:1.1rem">最初からすべてを作らず、まず「ガチャを体験して図鑑に集める」一連の流れを完成させる。</p>
+    <div class="flow" style="margin-top:25px">
+      <div class="step"><span class="icon">📱</span><strong>QR</strong></div>
+      <div class="step"><span class="icon">▶️</span><strong>START</strong></div>
+      <div class="step"><span class="icon">👤</span><strong>タイプ設定</strong></div>
+      <div class="step"><span class="icon">🎰</span><strong>10連</strong></div>
+      <div class="step"><span class="icon">✨</span><strong>結果</strong></div>
+      <div class="step"><span class="icon">📖</span><strong>図鑑</strong></div>
+    </div>
+    <p style="margin-bottom:0;margin-top:25px">その後、マップ・店舗情報・日本酒ペアリング・ミッションなどを追加。</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="section-label">11 / DEVELOPMENT POINTS</div>
+  <h2>開発時に検討すること</h2>
+  <div class="card-grid">
+    <div class="card"><div class="big">📍 QR・場所管理</div><p>どの店舗・観光地からアクセスしたかを判定する仕組み。</p></div>
+    <div class="card"><div class="big">💾 データ保存</div><p>タイプ設定・獲得履歴・図鑑の進捗などを保存。</p></div>
+    <div class="card"><div class="big">🎰 ガチャルール</div><p>同じ場所での回数制限、出現率、レア度などを検討。</p></div>
+    <div class="card"><div class="big">🗂️ コンテンツ管理</div><p>50～70個程度のコンテンツをカテゴリ・レア度・タイプ別に管理。</p></div>
+    <div class="card"><div class="big">🔄 タイプ変更</div><p>初回設定を保存しつつ、ホームから変更できるようにする。</p></div>
+    <div class="card"><div class="big">🛍️ 地域連携</div><p>飲食店・道の駅・観光施設・特産品購入との接続を検討。</p></div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="section-label">12 / CONCLUSION</div>
+  <h2>このアプリの価値</h2>
+  <p class="lead">「志賀町の情報を見せるアプリ」ではなく、「志賀町の情報を集めるために、実際に町を巡ってもらうアプリ」へ。</p>
+  <div class="quote">「次のガチャを回すために、次の場所へ行く。」</div>
+  <p style="text-align:center;font-weight:900;font-size:1.2rem">🎰 遊ぶ　→　💡 知る　→　🗺️ 巡る　→　🍴 食べる・🛍️ 買う</p>
+</section>
+
+<footer>
+  <strong>志賀町デジタル情報課｜日本酒ハッカソン</strong><br>
+  開発会議用コンセプト資料
+</footer>
+</body>
+</html>
